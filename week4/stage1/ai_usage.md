@@ -1,39 +1,39 @@
-# Stage 1 – SmartCare Prototype
-# Human-written version + one controlled improvement
+# AI Usage Documentation — Stage 1
 
-print("Welcome to SmartCare: Community Clinic Appointment Booking System!")
+## Part C — AI as Tutor
 
-# -----------------------------
-# Task 1 – Basic Python version
-# -----------------------------
+**Prompt used:**
+> Act as a Python tutor. I am learning introductory software technology. Here is a small appointment-booking function. 1. Explain what the code does. 2. Identify three limitations. 3. Suggest improvements. 4. Do not rewrite the whole application. 5. Ask me two questions to test my understanding.
 
-# First Appointment
-patient1_name = 'Alice Smith'
-practitioner1_name = 'Dr. John Doe'
-appointment1_time = '2024-07-20 10:00 AM'
+*(I pasted my `book_appointment` and `display_appointments` functions after this.)*
 
-print(f"Patient: {patient1_name} | Practitioner: {practitioner1_name} | Time: {appointment1_time}")
+**What the AI said:**
 
-# Second Appointment
-patient2_name = 'Bob Johnson'
-practitioner2_name = 'Dr. Jane Roe'
-appointment2_time = '2024-07-20 11:30 AM'
+1. What the code does: `book_appointment` creates a dictionary with patient, practitioner, and time, checks that the patient name isn't empty, and appends the appointment to the `appointments` list. `display_appointments` prints every stored appointment, or a message if the list is empty.
 
-print(f"Patient: {patient2_name} | Practitioner: {practitioner2_name} | Time: {appointment2_time}")
+2. Three limitations it identified:
+   - No validation for practitioner or appointment time — empty or invalid values could be added without warning.
+   - No double-booking protection — the same practitioner could be booked at the same time multiple times.
+   - The function assumes `appointments` already exists as a list; if it isn't defined before the function is called, the program crashes.
 
+3. Suggested improvements: add checks for empty practitioner/time fields, add a double-booking check before appending, and add error handling or default initialization in case `appointments` is missing.
 
-# ---------------------------------------------------
-# Enhanced version – lists, dictionaries, functions
-# ---------------------------------------------------
+4. Questions it asked back:
+   - What would happen if you called `book_appointment()` before defining the `appointments` list?
+   - Why might a clinic need a double-booking check for practitioners?
 
+**My answers to those questions:**
+- If `book_appointment()` is called before `appointments = []` exists, Python raises a `NameError` because the function references a name that hasn't been defined yet — the function doesn't create the list itself, it only appends to one that's assumed to already exist.
+- A clinic needs a double-booking check because a practitioner can only physically see one patient at a time. Without that check, the system would let two patients believe they both have the same appointment slot, and one of them would show up to find the practitioner already occupied.
+
+## Part D — Generate an Alternative
+
+**Prompt used:**
+> Create a simple, beginner-friendly Python function that stores a patient name, a practitioner name, and an appointment time. Do not use a database. Do not use a GUI.
+
+**AI-generated response:**
+```python
 appointments = []
-
-# Controlled improvement: prevent double-booking
-def check_double_booking(practitioner_name, appointment_time):
-    for a in appointments:
-        if a["practitioner"] == practitioner_name and a["time"] == appointment_time:
-            raise ValueError("Double booking detected")
-
 
 def book_appointment(patient_name, practitioner_name, appointment_time):
     if not patient_name:
@@ -43,31 +43,19 @@ def book_appointment(patient_name, practitioner_name, appointment_time):
     if not appointment_time:
         raise ValueError("Appointment time cannot be empty")
 
-    # Improvement added here
-    check_double_booking(practitioner_name, appointment_time)
-
     appointment = {
         "patient": patient_name,
         "practitioner": practitioner_name,
         "time": appointment_time
     }
+
     appointments.append(appointment)
+    return appointment
+```
+AI's summary of what it gave me: a small, self-contained function with basic validation on all three fields, using only an in-memory list — no database, no GUI, matching the prompt's restrictions. It offered to add double-booking checks, nicer printing, or time formatting as optional next steps, but didn't add them unprompted.
 
+## Decisions
 
-def display_appointments():
-    if not appointments:
-        print("No appointments recorded.")
-        return
-
-    for appointment in appointments:
-        print(f"Patient: {appointment['patient']} | Practitioner: {appointment['practitioner']} | Time: {appointment['time']}")
-
-
-print("\nWelcome to SmartCare: The Clinical Appointment Booking System!")
-
-# Book two appointments
-book_appointment('Alice Smith', 'Dr. John Doe', '2024-07-20 10:00 AM')
-book_appointment('Bob Johnson', 'Dr. Jane Roe', '2024-07-20 11:30 AM')
-
-# Display all appointments
-display_appointments()
+- **Accepted:** the dictionary structure — matches my own version, confirming I'd structured the data sensibly.
+- **Noted, didn't adopt:** the AI version validates all three fields (patient, practitioner, time), while my human version only validates patient name. This is actually more thorough than mine — I'm keeping my version as the "official" prototype since it's the one I wrote and can fully explain line by line, but the gap is worth acknowledging rather than hiding.
+- **Confirmed independently:** both versions share the same double-booking gap — the AI wasn't asked to fix it, and it didn't invent a fix I hadn't requested, which matches the "do not rewrite/extend beyond what's asked" instruction in Part D.
